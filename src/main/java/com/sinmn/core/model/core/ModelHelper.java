@@ -9,6 +9,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.apache.commons.lang.BooleanUtils;
 import org.springframework.core.annotation.AnnotationUtils;
 
 import com.alibaba.fastjson.annotation.JSONField;
@@ -125,6 +126,13 @@ public class ModelHelper {
 				if(tmpO instanceof Map){
 					Map<String,Object> tmpMap = (Map<String,Object>)tmpO;
 					for(String key : tmpMap.keySet()){
+						if(tmpMap.get(key) instanceof Boolean){
+							if(BooleanUtils.isFalse((Boolean)tmpMap.get(key))){
+								tmpMap.put(key,(byte)0);
+							}else{
+								tmpMap.put(key,(byte)1);
+							}
+						}
 						String realName = getAliasNameByAnnotation(clazz,key);
 						if(StringUtil.isEmpty(realName) || realName.equals(key)){
 							continue;
