@@ -121,18 +121,28 @@ public class ModelHelper {
 		if(source instanceof List){
 			List list = (List)source;
 			if(list.size() != 0){
+				
+				//将 boolean 转成 数字
+				for(Object o : list){
+					if(o instanceof Map){
+						Map<String,Object> tmpMap = (Map<String,Object>)o;
+						for(String key : tmpMap.keySet()){
+							if(tmpMap.get(key) instanceof Boolean){
+								if(BooleanUtils.isFalse((Boolean)tmpMap.get(key))){
+									tmpMap.put(key,(byte)0);
+								}else{
+									tmpMap.put(key,(byte)1);
+								}
+							}
+						}
+					}
+				}
+				
 				Object tmpO = list.get(0);
 				Map<String,String> alias = new HashMap<String,String>();
 				if(tmpO instanceof Map){
 					Map<String,Object> tmpMap = (Map<String,Object>)tmpO;
 					for(String key : tmpMap.keySet()){
-						if(tmpMap.get(key) instanceof Boolean){
-							if(BooleanUtils.isFalse((Boolean)tmpMap.get(key))){
-								tmpMap.put(key,(byte)0);
-							}else{
-								tmpMap.put(key,(byte)1);
-							}
-						}
 						String realName = getAliasNameByAnnotation(clazz,key);
 						if(StringUtil.isEmpty(realName) || realName.equals(key)){
 							continue;
