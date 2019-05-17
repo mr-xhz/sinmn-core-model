@@ -777,7 +777,7 @@ public class Model<T> extends BaseModel implements IModel<T>{
 				Thread.sleep(100);
 			} catch (InterruptedException e) {
 			}
-			if(System.currentTimeMillis() - currentTime > 60000){
+			if(System.currentTimeMillis() - currentTime > 60 * 60 * 1000){
 				logger.error("请先配置SpringContextUtil");
 				return null;
 			}
